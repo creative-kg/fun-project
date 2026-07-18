@@ -9,6 +9,10 @@
   let currentIndex = 0;
   let noAttempts = 0;
   const noMessages = [
+    "Sochungi 😅",
+    "Aare dhamki thori hai!!",
+    "May be 😏",
+    "Bhebe dekhbo🌚🌚🌚",
     "Think twice 🤔",
     "Are you sure? 😏",
     "Umm… really? 👀",
@@ -21,18 +25,14 @@
     "Reconsider! 🥺",
     "Final answer? 😏",
     "Locking in… NO? 🤨",
-    "This isn’t KBC 😭",
     "Nice try 😜",
     "Come onnnn 🫶",
     "Be honest 😌",
     "You’re chasing the wrong one 🏃‍♀️",
     "Still no? 😳",
-    "Ok now it’s personal 😤",
-    "😂",
     "YES is right there 👉",
     "Stoppppp 😭",
     "Last LAST chance 😇",
-    "Too late now 😜",
   ];
 
   function getScreenByName(name) {
