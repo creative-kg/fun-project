@@ -5,7 +5,8 @@
   const yesBtn = document.getElementById("yesBtn");
   const noBtn = document.getElementById("noBtn");
 
-  const order = ["intro", "q1", "q2", "q3", "q4", "q5", "valentine", "final"];
+  // const order = ["intro", "q1", "q2", "q3", "q4", "q5", "valentine", "final"];
+  const order = ["intro", "q1", "q2", "q3", "q4", "valentine", "final"];
   let currentIndex = 0;
   let noAttempts = 0;
   const noMessages = [
