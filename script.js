@@ -36,6 +36,54 @@
     "Last LAST chance 😇",
   ];
 
+  // ---- Response logging (appends to a Google Sheet via Apps Script Web App) ----
+  // See google-apps-script.gs for the backend code + README for setup steps.
+  const RESPONSES_ENDPOINT = "https://script.google.com/macros/s/AKfycbzHvNogBrvqA9h0Ri0owqaHygMFqngQwuZmr1dqaFPCcQr_K9eMBOr2hYTRqFL0Oo9AtA/exec";
+
+  const sessionId =
+    (window.crypto && crypto.randomUUID && crypto.randomUUID()) ||
+    `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  const responses = { q1: null, q2: null, q3: null, q4: null };
+  let visitorIp = "";
+  let submitted = false;
+
+  fetch("https://api.ipify.org?format=json")
+    .then((res) => res.json())
+    .then((data) => {
+      visitorIp = data.ip || "";
+    })
+    .catch(() => {});
+
+  function submitResponses() {
+    if (submitted) return;
+    submitted = true;
+
+    if (!RESPONSES_ENDPOINT || RESPONSES_ENDPOINT.includes("PASTE_YOUR")) {
+      console.warn("Responses endpoint not configured — skipping submission.");
+      return;
+    }
+
+    const payload = {
+      timestamp: new Date().toISOString(),
+      sessionId,
+      ip: visitorIp,
+      q1: responses.q1,
+      q2: responses.q2,
+      q3: responses.q3,
+      q4: responses.q4,
+      noAttempts,
+      userAgent: navigator.userAgent,
+    };
+
+    // text/plain avoids a CORS preflight (Apps Script doesn't handle OPTIONS).
+    fetch(RESPONSES_ENDPOINT, {
+      method: "POST",
+      mode: "no-cors",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(payload),
+    }).catch(() => {});
+  }
+
   function getScreenByName(name) {
     return screens.find((s) => s.dataset.screen === name);
   }
@@ -65,6 +113,12 @@
   // Handle MCQ questions: all options are "correct"
   document.querySelectorAll(".options .option").forEach((btn) => {
     btn.addEventListener("click", () => {
+      const screenEl = btn.closest(".screen");
+      const qName = screenEl && screenEl.dataset.screen;
+      if (qName && Object.prototype.hasOwnProperty.call(responses, qName)) {
+        responses[qName] = btn.textContent.trim();
+      }
+
       // Show celebration overlay briefly
       celebrate.classList.remove("hidden");
       celebrate.classList.add("show");
@@ -325,6 +379,7 @@
 
     // Yes moves to final screen
     yesBtn.addEventListener("click", () => {
+      submitResponses();
       showScreenByIndex(order.indexOf("final"));
     });
   }
