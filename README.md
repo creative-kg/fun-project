@@ -1,1 +1,1 @@
-Author - Koustav Ghosh
+Author: Koustav Ghosh

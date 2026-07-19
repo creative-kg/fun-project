@@ -204,6 +204,13 @@ p {
   display: none;
 }
 
+.emoji {
+  height: 1.15em;
+  width: 1.15em;
+  vertical-align: -0.2em;
+  display: inline-block;
+}
+
 @keyframes floatIn {
   from {
     opacity: 0;
